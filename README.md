@@ -76,51 +76,128 @@ Thiết kế hệ thống đỗ xe thông minh tự động hóa quy trình:
 
 ## 🛠️ 6. Các module chính cần thiết kế
 
-### 1. Sensor Interface Module
+✅ ###1. Sensor Interface Module
+📥 Đầu vào:
+Tín hiệu	Vai trò
+clk	Đồng hồ hệ thống
+reset	Reset đồng bộ, khởi động lại module
+Raw_entry_sensor	Tín hiệu cảm biến đầu vào xe (có thể nhiễu)
+Raw_exit_sensor	Tín hiệu cảm biến đầu ra xe (có thể nhiễu)
 
-* Xử lý Raw sensor, debounce 100ms
-* Output: `entry_detected`, `exit_detected`
+📤 Đầu ra:
+Tín hiệu	Vai trò
+entry_detected	Tín hiệu đã phát hiện xe vào sau debounce
+exit_detected	Tín hiệu đã phát hiện xe ra sau debounce
 
-### 2. Authentication Module
+Ghi chú: Cần thêm logic debounce 100ms để lọc nhiễu từ cảm biến.
 
-* Nhận `Card_id`, xử lý 2s xác minh
-* Output: `auth_valid`, `auth_done`
+✅ 2. Authentication Module
+📥 Đầu vào:
+Tín hiệu	Vai trò
+clk	Đồng hồ
+reset	Reset module
+Card_id[3:0]	Dữ liệu ID của thẻ xe từ đầu đọc thẻ
 
-### 3. Barrier Control Module
+📤 Đầu ra:
+Tín hiệu	Vai trò
+auth_valid	1 nếu thẻ hợp lệ
+auth_done	1 khi kiểm tra thẻ hoàn tất (sau 2 giây)
 
-* Nhận lệnh từ FSM, mở/đóng trong 3s
-* Output: `Entry_barrier`, `Exit_barrier`
+Ghi chú: Có thể dùng bộ đếm thời gian 2 giây để tạo auth_done.
 
-### 4. Parking Management
+✅ 3. Barrier Control Module
+📥 Đầu vào:
+Tín hiệu	Vai trò
+clk, reset	Hệ thống
+entry_open_cmd	Lệnh mở barrier đầu vào
+exit_open_cmd	Lệnh mở barrier đầu ra
 
-* Đếm xe vào/ra, số lượng chỗ trống (0–100)
-* Output: `Available_spaces`, `Parking_full`
+📤 Đầu ra:
+Tín hiệu	Vai trò
+Entry_barrier	1: mở, 0: đóng
+Exit_barrier	1: mở, 0: đóng
 
-### 5. Fee Calculation
+Ghi chú: Mỗi barrier mở trong 3 giây, cần timer.
 
-* Nhận `entry_time`, `exit_time`, tính phí
-* Output: `Fee_amount`, `fee_calc_done`
+✅ 4. Parking Management Module
+📥 Đầu vào:
+Tín hiệu	Vai trò
+clk, reset	Điều khiển cơ bản
+entry_confirmed	Xe đã đi vào (qua barrier + sensor)
+exit_confirmed	Xe đã ra ngoài
 
-### 6. Display Control
+📤 Đầu ra:
+Tín hiệu	Vai trò
+Available_spaces[5:0]	Số lượng chỗ trống (0–100)
+Parking_full	Bật khi hết chỗ đậu
 
-* Điều khiển LED 7-segment theo `display_data`
-* Output: `Segment_display`, `Digit_select`
+Ghi chú: Cần bộ đếm lên/xuống, giới hạn 0–100.
 
-### 7. LED Indicator
+✅ 5. Fee Calculation Module
+📥 Đầu vào:
+Tín hiệu	Vai trò
+clk, reset	Hệ thống
+entry_time	Dữ liệu thời gian xe vào
+exit_time	Dữ liệu thời gian xe ra
+start_fee_calc	Kích hoạt quá trình tính phí
 
-* Hiển thị trạng thái hệ thống qua LED
-* Output: `Led_indicators`
+📤 Đầu ra:
+Tín hiệu	Vai trò
+Fee_amount[7:0]	Số tiền phí tính được
+fee_calc_done	Cho biết quá trình tính phí đã xong
 
-### 8. Alarm Module
+Ghi chú: Áp dụng biểu phí: Giờ (5đ), Ngày (50đ), Tuần (200đ).
 
-* Kích hoạt khi Emergency
-* Output: `Alarm`
+✅ 6. Display Control Module
+📥 Đầu vào:
+Tín hiệu	Vai trò
+clk, reset	Hệ thống
+Digit_select[3:0]	Chọn digit trên 7-segment
+display_data[7:0]	Dữ liệu cần hiển thị
 
-### 9. FSM Controller
+📤 Đầu ra:
+Tín hiệu	Vai trò
+Segment_display[7:0]	Điều khiển các thanh led
 
-* Quản lý tuần tự hoạt động hệ thống
-* Điều khiển các lệnh: mở barrier, bắt đầu tính phí, ...
-* Output: `entry_open_cmd`, `exit_open_cmd`, `display_data`, `system_state`
+Ghi chú: Có thể chạy kiểu multiplexing 1kHz để hiển thị từng digit.
+
+✅ 7. LED Indicator Module
+📥 Đầu vào:
+Tín hiệu	Vai trò
+clk, reset	Hệ thống
+system_state[2:0]	Trạng thái hệ thống từ FSM
+
+📤 Đầu ra:
+Tín hiệu	Vai trò
+Led_indicators[3:0]	Báo trạng thái: Normal, Full, Error, Processing
+
+✅ 8. Alarm Module
+📥 Đầu vào:
+Tín hiệu	Vai trò
+Emergency	Cảnh báo khẩn cấp từ người dùng
+
+📤 Đầu ra:
+Tín hiệu	Vai trò
+Alarm	1 nếu có báo động
+
+Ghi chú: Ưu tiên cao, phản hồi <500ms.
+
+✅ 9. FSM Controller (Main Control)
+📥 Đầu vào:
+Tín hiệu	Vai trò
+clk, reset	Điều khiển chính
+entry_detected, exit_detected	Từ Sensor
+auth_valid, auth_done	Từ Authentication
+fee_calc_done	Từ Fee Module
+Parking_full, Emergency	Tình trạng hệ thống
+
+📤 Đầu ra:
+Tín hiệu	Vai trò
+entry_open_cmd, exit_open_cmd	Điều khiển barrier
+entry_confirmed, exit_confirmed	Tín hiệu cập nhật số chỗ
+start_fee_calc	Kích hoạt tính phí
+display_data[7:0]	Dữ liệu gửi tới Display
+system_state[2:0]	Gửi đến LED
 
 ---
 
