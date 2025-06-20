@@ -76,7 +76,7 @@ Thiết kế hệ thống đỗ xe thông minh tự động hóa quy trình:
 
 ## 🛠️ 6. Các module chính cần thiết kế
 
-✅ 1. Sensor Interface Module
+**✅ 1. Sensor Interface Module**
 
 📥 Đầu vào:
 | Tín hiệu           | Vai trò                                     |
@@ -94,7 +94,7 @@ Thiết kế hệ thống đỗ xe thông minh tự động hóa quy trình:
 
 Ghi chú: Cần thêm logic debounce 100ms để lọc nhiễu từ cảm biến.
 
-✅ 2. Authentication Module
+**✅ 2. Authentication Module**
 
 📥 Đầu vào:
 | Tín hiệu       | Vai trò                              |
@@ -111,7 +111,7 @@ Ghi chú: Cần thêm logic debounce 100ms để lọc nhiễu từ cảm biến
 
 *Ghi chú: Có thể dùng bộ đếm thời gian 2 giây để tạo auth_done.
 
-✅ 3. Barrier Control Module
+**✅ 3. Barrier Control Module**
 
 📥 Đầu vào:
 | Tín hiệu         | Vai trò                 |
@@ -128,7 +128,7 @@ Ghi chú: Cần thêm logic debounce 100ms để lọc nhiễu từ cảm biến
 
 Ghi chú: Mỗi barrier mở trong 3 giây, cần timer.
 
-✅ 4. Parking Management Module
+**✅ 4. Parking Management Module**
 
 📥 Đầu vào:
 | Tín hiệu          | Vai trò                             |
@@ -145,7 +145,7 @@ Ghi chú: Mỗi barrier mở trong 3 giây, cần timer.
 
 Ghi chú: Cần bộ đếm lên/xuống, giới hạn 0–100.
 
-✅ 5. Fee Calculation Module
+**✅ 5. Fee Calculation Module**
 
 📥 Đầu vào:
 | Tín hiệu         | Vai trò                      |
@@ -163,7 +163,7 @@ Ghi chú: Cần bộ đếm lên/xuống, giới hạn 0–100.
 
 Ghi chú: Áp dụng biểu phí: Giờ (5đ), Ngày (50đ), Tuần (200đ).
 
-✅ 6. Display Control Module
+**✅ 6. Display Control Module**
 
 📥 Đầu vào:
 | Tín hiệu            | Vai trò                   |
@@ -179,7 +179,7 @@ Ghi chú: Áp dụng biểu phí: Giờ (5đ), Ngày (50đ), Tuần (200đ).
 
 Ghi chú: Có thể chạy kiểu multiplexing 1kHz để hiển thị từng digit.
 
-✅ 7. LED Indicator Module
+**✅ 7. LED Indicator Module**
 
 📥 Đầu vào:
 | Tín hiệu            | Vai trò                    |
@@ -192,7 +192,7 @@ Ghi chú: Có thể chạy kiểu multiplexing 1kHz để hiển thị từng di
 | --------------------- | ----------------------------------------------- |
 | `Led_indicators[3:0]` | Báo trạng thái: Normal, Full, Error, Processing |
 
-✅ 8. Alarm Module
+**✅ 8. Alarm Module**
 
 📥 Đầu vào:
 | Tín hiệu    | Vai trò                         |
@@ -206,7 +206,7 @@ Ghi chú: Có thể chạy kiểu multiplexing 1kHz để hiển thị từng di
 
 Ghi chú: Ưu tiên cao, phản hồi <500ms.
 
-✅ 9. FSM Controller (Main Control)
+**✅ 9. FSM Controller (Main Control)**
 
 📥 Đầu vào:
 | Tín hiệu                          | Vai trò             |
