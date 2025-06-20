@@ -86,7 +86,7 @@ Thiết kế hệ thống đỗ xe thông minh tự động hóa quy trình:
 | `Raw_entry_sensor` | Tín hiệu cảm biến đầu vào xe (có thể nhiễu) |
 | `Raw_exit_sensor`  | Tín hiệu cảm biến đầu ra xe (có thể nhiễu)  |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu         | Vai trò                                   |
 | ---------------- | ----------------------------------------- |
 | `entry_detected` | Tín hiệu đã phát hiện xe vào sau debounce |
@@ -95,14 +95,15 @@ Thiết kế hệ thống đỗ xe thông minh tự động hóa quy trình:
 Ghi chú: Cần thêm logic debounce 100ms để lọc nhiễu từ cảm biến.
 
 ✅ 2. Authentication Module
-*📥 Đầu vào:
+
+📥 Đầu vào:
 | Tín hiệu       | Vai trò                              |
 | -------------- | ------------------------------------ |
 | `clk`          | Đồng hồ                              |
 | `reset`        | Reset module                         |
 | `Card_id[3:0]` | Dữ liệu ID của thẻ xe từ đầu đọc thẻ |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu     | Vai trò                                  |
 | ------------ | ---------------------------------------- |
 | `auth_valid` | 1 nếu thẻ hợp lệ                         |
@@ -111,14 +112,15 @@ Ghi chú: Cần thêm logic debounce 100ms để lọc nhiễu từ cảm biến
 *Ghi chú: Có thể dùng bộ đếm thời gian 2 giây để tạo auth_done.
 
 ✅ 3. Barrier Control Module
-*📥 Đầu vào:
+
+📥 Đầu vào:
 | Tín hiệu         | Vai trò                 |
 | ---------------- | ----------------------- |
 | `clk`, `reset`   | Hệ thống                |
 | `entry_open_cmd` | Lệnh mở barrier đầu vào |
 | `exit_open_cmd`  | Lệnh mở barrier đầu ra  |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu        | Vai trò        |
 | --------------- | -------------- |
 | `Entry_barrier` | 1: mở, 0: đóng |
@@ -127,14 +129,15 @@ Ghi chú: Cần thêm logic debounce 100ms để lọc nhiễu từ cảm biến
 Ghi chú: Mỗi barrier mở trong 3 giây, cần timer.
 
 ✅ 4. Parking Management Module
-*📥 Đầu vào:
+
+📥 Đầu vào:
 | Tín hiệu          | Vai trò                             |
 | ----------------- | ----------------------------------- |
 | `clk`, `reset`    | Điều khiển cơ bản                   |
 | `entry_confirmed` | Xe đã đi vào (qua barrier + sensor) |
 | `exit_confirmed`  | Xe đã ra ngoài                      |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu                | Vai trò                    |
 | ----------------------- | -------------------------- |
 | `Available_spaces[5:0]` | Số lượng chỗ trống (0–100) |
@@ -143,7 +146,8 @@ Ghi chú: Mỗi barrier mở trong 3 giây, cần timer.
 Ghi chú: Cần bộ đếm lên/xuống, giới hạn 0–100.
 
 ✅ 5. Fee Calculation Module
-*📥 Đầu vào:
+
+📥 Đầu vào:
 | Tín hiệu         | Vai trò                      |
 | ---------------- | ---------------------------- |
 | `clk`, `reset`   | Hệ thống                     |
@@ -151,7 +155,7 @@ Ghi chú: Cần bộ đếm lên/xuống, giới hạn 0–100.
 | `exit_time`      | Dữ liệu thời gian xe ra      |
 | `start_fee_calc` | Kích hoạt quá trình tính phí |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu          | Vai trò                             |
 | ----------------- | ----------------------------------- |
 | `Fee_amount[7:0]` | Số tiền phí tính được               |
@@ -160,14 +164,15 @@ Ghi chú: Cần bộ đếm lên/xuống, giới hạn 0–100.
 Ghi chú: Áp dụng biểu phí: Giờ (5đ), Ngày (50đ), Tuần (200đ).
 
 ✅ 6. Display Control Module
-*📥 Đầu vào:
+
+📥 Đầu vào:
 | Tín hiệu            | Vai trò                   |
 | ------------------- | ------------------------- |
 | `clk`, `reset`      | Hệ thống                  |
 | `Digit_select[3:0]` | Chọn digit trên 7-segment |
 | `display_data[7:0]` | Dữ liệu cần hiển thị      |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu               | Vai trò                  |
 | ---------------------- | ------------------------ |
 | `Segment_display[7:0]` | Điều khiển các thanh led |
@@ -175,24 +180,26 @@ Ghi chú: Áp dụng biểu phí: Giờ (5đ), Ngày (50đ), Tuần (200đ).
 Ghi chú: Có thể chạy kiểu multiplexing 1kHz để hiển thị từng digit.
 
 ✅ 7. LED Indicator Module
-*📥 Đầu vào:
+
+📥 Đầu vào:
 | Tín hiệu            | Vai trò                    |
 | ------------------- | -------------------------- |
 | `clk`, `reset`      | Hệ thống                   |
 | `system_state[2:0]` | Trạng thái hệ thống từ FSM |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu              | Vai trò                                         |
 | --------------------- | ----------------------------------------------- |
 | `Led_indicators[3:0]` | Báo trạng thái: Normal, Full, Error, Processing |
 
 ✅ 8. Alarm Module
-*📥 Đầu vào:
+
+📥 Đầu vào:
 | Tín hiệu    | Vai trò                         |
 | ----------- | ------------------------------- |
 | `Emergency` | Cảnh báo khẩn cấp từ người dùng |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu | Vai trò           |
 | -------- | ----------------- |
 | `Alarm`  | 1 nếu có báo động |
@@ -200,7 +207,8 @@ Ghi chú: Có thể chạy kiểu multiplexing 1kHz để hiển thị từng di
 Ghi chú: Ưu tiên cao, phản hồi <500ms.
 
 ✅ 9. FSM Controller (Main Control)
-*📥 Đầu vào:
+
+📥 Đầu vào:
 | Tín hiệu                          | Vai trò             |
 | --------------------------------- | ------------------- |
 | `clk`, `reset`                    | Điều khiển chính    |
@@ -209,7 +217,7 @@ Ghi chú: Ưu tiên cao, phản hồi <500ms.
 | `fee_calc_done`                   | Từ Fee Module       |
 | `Parking_full`, `Emergency`       | Tình trạng hệ thống |
 
-*📤 Đầu ra:
+📤 Đầu ra:
 | Tín hiệu                            | Vai trò                  |
 | ----------------------------------- | ------------------------ |
 | `entry_open_cmd`, `exit_open_cmd`   | Điều khiển barrier       |
