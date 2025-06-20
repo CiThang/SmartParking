@@ -76,8 +76,9 @@ Thiết kế hệ thống đỗ xe thông minh tự động hóa quy trình:
 
 ## 🛠️ 6. Các module chính cần thiết kế
 
-*✅ 1. Sensor Interface Module
-*📥 Đầu vào:
+✅ 1. Sensor Interface Module
+
+📥 Đầu vào:
 | Tín hiệu           | Vai trò                                     |
 | ------------------ | ------------------------------------------- |
 | `clk`              | Đồng hồ hệ thống                            |
